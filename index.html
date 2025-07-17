@@ -1,400 +1,348 @@
 <!DOCTYPE html>
-<html lang="en" class="scroll-smooth">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Marlon Jordan | Product Operations Manager</title>
+    <title>Marlon Jordan | Product Operations Professional</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <!-- Chosen Palette: Calm Neutrals -->
-    <!-- Application Structure Plan: The application is a single-page, vertical-scrolling site with a sticky navigation bar for quick access to key sections. The structure is designed to guide a recruiter or hiring manager through a logical narrative: 1. A top-level summary. 2. A direct, interactive "Role Fit" section mapping resume experience to the job's requirements. 3. A chronological "Career Journey" to show growth. 4. A visualized "Core Competencies" section for at-a-glance skill assessment. 5. A highlight reel of "Key Accomplishments". This structure prioritizes demonstrating suitability for the specific role over a generic resume format, making it highly user-centric for the target audience. The goal is to answer "Is this person a fit?" as clearly and efficiently as possible. -->
-    <!-- Visualization & Content Choices: 
-        - Role Fit Analysis: (Report Info: JD Requirements vs. Resume Experience) -> (Goal: Compare/Relate) -> (Viz: Two-column interactive list) -> (Interaction: Clicking a requirement highlights the corresponding experience) -> (Justification: Directly demonstrates candidate's fit in a clear, interactive way that is more engaging than static text) -> (Library/Method: HTML/Tailwind/JS).
-        - Career Journey: (Report Info: Work History) -> (Goal: Show Change/Growth) -> (Viz: Vertical timeline) -> (Interaction: Click to expand details for each role) -> (Justification: More engaging and visually structured than a flat list, effectively shows career progression) -> (Library/Method: HTML/Tailwind/JS).
-        - Core Competencies: (Report Info: Skills List from Resume) -> (Goal: Inform/Compare) -> (Viz: Horizontal bar charts) -> (Interaction: Chart.js default tooltips on hover) -> (Justification: Visually quantifies skills for quick assessment, easier to digest than a text list) -> (Library/Method: Chart.js on Canvas).
-        - Key Accomplishments: (Report Info: Standout Project Results) -> (Goal: Inform/Highlight) -> (Viz: Card-based layout) -> (Interaction: Subtle hover effects on cards) -> (Justification: Calls attention to high-impact wins in a modern, scannable format) -> (Library/Method: HTML/Tailwind).
-    -->
+    <!-- Chosen Palette: Calm Harmony (Warm Neutrals with Muted Teal Accent) -->
+    <!-- Application Structure Plan: A top-down narrative SPA. It starts with an intro and a shortcut to the key "Alignment" section. It then flows from high-level competencies (chart) to detailed experience (two-column layout), followed by the direct role alignment (tabs), and finally supporting credentials (certifications, skills). This structure allows a recruiter to get a quick overview, jump to the most critical part, or follow a logical progression of the candidate's story. -->
+    <!-- Visualization & Content Choices: 1. **Core Competencies Chart**: Report Info: Skills categories -> Goal: Inform/Compare -> Viz: Horizontal Bar Chart -> Interaction: Hover tooltips -> Justification: Visually represents proficiency in key areas required by the JD. -> Library: Chart.js (Canvas). 2. **Experience Section**: Report Info: Work History -> Goal: Show Progression -> Viz: Two-column interactive layout -> Interaction: Click navigation to switch content -> Justification: Provides a clean, modern way to explore detailed experience without scrolling. -> Method: Vanilla JS. 3. **Alignment Tabs**: Report Info: JD Requirements vs. Resume -> Goal: Compare/Relate -> Viz: Interactive HTML/CSS Tabs -> Interaction: Click to switch views -> Justification: Directly demonstrates candidate fit. -> Method: Vanilla JS. 4. **Certifications**: Report Info: List of certs -> Goal: Explain Value -> Viz: Descriptive card layout -> Interaction: None -> Justification: Explains the 'so what' of each certification, connecting it directly to the role's needs. -> Method: HTML/CSS. -->
     <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
     <style>
         body {
             font-family: 'Inter', sans-serif;
+            background-color: #f8f9fa;
+            color: #343a40;
+        }
+        .tab-active {
+            border-color: #0d9488;
+            color: #0d9488;
+            font-weight: 600;
+        }
+        .exp-nav-active {
+            background-color: #f0fdfa;
+            color: #0d9488;
+            border-right-width: 4px;
+            border-color: #0d9488;
         }
         .chart-container {
             position: relative;
+            margin: auto;
+            height: 50vh;
+            max-height: 450px;
             width: 100%;
-            max-width: 800px;
-            margin-left: auto;
-            margin-right: auto;
-            height: 250px;
-            max-height: 300px;
-        }
-        @media (min-width: 768px) {
-            .chart-container {
-                height: 300px;
-            }
-        }
-        .nav-link.active {
-            color: #0284c7; /* sky-600 */
-            font-weight: 600;
-        }
-        .highlight-match {
-            transition: all 0.3s ease-in-out;
-            background-color: #e0f2fe; /* sky-100 */
-            border-left: 4px solid #0284c7; /* sky-600 */
-        }
-        .timeline-item-content {
-            transition: max-height 0.5s ease-in-out, opacity 0.5s ease-in-out;
-            max-height: 0;
-            opacity: 0;
-            overflow: hidden;
-        }
-        .timeline-item-content.expanded {
-            max-height: 500px;
-            opacity: 1;
+            max-width: 900px;
         }
     </style>
 </head>
-<body class="bg-slate-50 text-slate-700">
+<body class="antialiased bg-gray-50">
+    <div class="absolute top-0 left-0 w-full h-full bg-gradient-to-br from-teal-50 via-white to-gray-50 -z-10"></div>
+    <div class="container mx-auto max-w-6xl p-4 sm:p-6 lg:p-8">
 
-    <header class="bg-slate-50/80 backdrop-blur-lg sticky top-0 z-50 border-b border-slate-200">
-        <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex items-center justify-between h-16">
-                <div class="flex items-center">
-                    <span class="font-bold text-xl text-slate-800">Marlon Jordan</span>
-                </div>
-                <div class="hidden md:block">
-                    <div class="ml-10 flex items-baseline space-x-4">
-                        <a href="#summary" class="nav-link px-3 py-2 rounded-md text-sm font-medium text-slate-600 hover:text-sky-600">Summary</a>
-                        <a href="#role-fit" class="nav-link px-3 py-2 rounded-md text-sm font-medium text-slate-600 hover:text-sky-600">Role Fit</a>
-                        <a href="#experience" class="nav-link px-3 py-2 rounded-md text-sm font-medium text-slate-600 hover:text-sky-600">Experience</a>
-                        <a href="#skills" class="nav-link px-3 py-2 rounded-md text-sm font-medium text-slate-600 hover:text-sky-600">Skills</a>
-                        <a href="#contact" class="nav-link px-3 py-2 rounded-md text-sm font-medium text-slate-600 hover:text-sky-600">Contact</a>
-                    </div>
-                </div>
-                <div class="-mr-2 flex md:hidden">
-                    <button id="mobile-menu-button" type="button" class="bg-slate-100 inline-flex items-center justify-center p-2 rounded-md text-slate-500 hover:text-slate-600 hover:bg-slate-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-slate-100 focus:ring-sky-500" aria-controls="mobile-menu" aria-expanded="false">
-                        <span class="sr-only">Open main menu</span>
-                        <div id="hamburger-icon" class="block h-6 w-6">
-                            <span class="block h-0.5 w-6 bg-current transform transition duration-500 ease-in-out"></span>
-                            <span class="block h-0.5 w-6 bg-current mt-1.5 transform transition duration-500 ease-in-out"></span>
-                            <span class="block h-0.5 w-6 bg-current mt-1.5 transform transition duration-500 ease-in-out"></span>
-                        </div>
+        <header class="text-center mb-16">
+            <h1 class="text-4xl md:text-5xl font-bold text-gray-800">Marlon Jordan</h1>
+            <p class="mt-2 text-lg text-teal-700 font-medium">Product Operations Professional</p>
+        </header>
+
+        <main>
+            <section id="intro" class="bg-white/80 backdrop-blur-sm p-8 rounded-xl shadow-md mb-12 border border-gray-200">
+                <h2 class="text-2xl font-bold text-gray-800 mb-4 text-center">An Introduction</h2>
+                <p class="text-center max-w-4xl mx-auto text-gray-600 leading-relaxed mb-6">
+                    Welcome. This interactive page details my professional background and demonstrates my direct alignment with the Product Operations Manager role at Altice. My experience is centered on enhancing product quality, optimizing operational processes, and using data to drive decisions—all key aspects of this opportunity.
+                </p>
+                <div class="flex justify-center items-center space-x-4">
+                     <a href="https://linkedin.com/in/mj2117" target="_blank" class="inline-block bg-blue-600 text-white font-semibold py-2 px-5 rounded-lg shadow-sm hover:bg-blue-700 transition-colors">
+                        View LinkedIn Profile
+                    </a>
+                    <button id="alignment-shortcut" class="inline-block bg-teal-600 text-white font-semibold py-2 px-5 rounded-lg shadow-sm hover:bg-teal-700 transition-colors">
+                        See Role Alignment
                     </button>
                 </div>
-            </div>
-        </nav>
-        <div class="md:hidden hidden" id="mobile-menu">
-            <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
-                <a href="#summary" class="nav-link block px-3 py-2 rounded-md text-base font-medium text-slate-600 hover:text-sky-600 hover:bg-slate-100">Summary</a>
-                <a href="#role-fit" class="nav-link block px-3 py-2 rounded-md text-base font-medium text-slate-600 hover:text-sky-600 hover:bg-slate-100">Role Fit</a>
-                <a href="#experience" class="nav-link block px-3 py-2 rounded-md text-base font-medium text-slate-600 hover:text-sky-600 hover:bg-slate-100">Experience</a>
-                <a href="#skills" class="nav-link block px-3 py-2 rounded-md text-base font-medium text-slate-600 hover:text-sky-600 hover:bg-slate-100">Skills</a>
-                <a href="#contact" class="nav-link block px-3 py-2 rounded-md text-base font-medium text-slate-600 hover:text-sky-600 hover:bg-slate-100">Contact</a>
-            </div>
-        </div>
-    </header>
+            </section>
 
-    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12">
+            <section id="competencies" class="bg-white/80 backdrop-blur-sm p-8 rounded-xl shadow-md mb-12 border border-gray-200">
+                <h2 class="text-2xl font-bold text-gray-800 mb-2 text-center">Core Competencies</h2>
+                <p class="text-center text-gray-500 mb-8">A visual overview of my proficiency in key operational areas.</p>
+                <div class="chart-container">
+                    <canvas id="competencyChart"></canvas>
+                </div>
+            </section>
+
+            <section id="experience" class="mb-12">
+                 <h2 class="text-3xl font-bold text-gray-800 mb-8 text-center">Professional Experience</h2>
+                 <div class="grid md:grid-cols-3 gap-8 lg:gap-12">
+                     <div class="md:col-span-1">
+                         <div class="space-y-2">
+                             <button class="exp-nav-button w-full text-left p-4 rounded-lg transition-colors exp-nav-active" data-target="exp-panel-1">
+                                 <h3 class="font-semibold">Product Operations Specialist</h3>
+                                 <p class="text-sm text-gray-500">Bloomberg LP | 2021 - Present</p>
+                             </button>
+                             <button class="exp-nav-button w-full text-left p-4 rounded-lg transition-colors" data-target="exp-panel-2">
+                                 <h3 class="font-semibold">Technical Support Lead Executive</h3>
+                                 <p class="text-sm text-gray-500">Bloomberg LP | 2017 - 2021</p>
+                             </button>
+                             <button class="exp-nav-button w-full text-left p-4 rounded-lg transition-colors" data-target="exp-panel-3">
+                                 <h3 class="font-semibold">Senior IT Support Engineer</h3>
+                                 <p class="text-sm text-gray-500">Bloomberg LP | 2013 - 2017</p>
+                             </button>
+                         </div>
+                     </div>
+                     <div class="md:col-span-2">
+                         <div id="exp-panel-1" class="exp-panel bg-white/60 p-6 rounded-lg border">
+                             <ul class="list-disc space-y-3 pl-5 text-gray-700">
+                                <li>Directed full implementation of 4+ SaaS solutions across multiple business units, achieving approximately $150,000 in annual savings.</li>
+                                <li>Developed and enforced standardized procedures for user access controls, improving operational efficiency.</li>
+                                <li>Established a user feedback loop by collecting and analyzing survey data to drive product improvements.</li>
+                                <li>Planned and executed over 40 high-profile product-related events annually, mitigating risks and coordinating teams.</li>
+                                <li>Investigated and resolved approximately 30 technical incidents monthly, using root cause analysis to increase product reliability.</li>
+                            </ul>
+                         </div>
+                         <div id="exp-panel-2" class="exp-panel hidden bg-white/60 p-6 rounded-lg border">
+                            <ul class="list-disc space-y-3 pl-5 text-gray-700">
+                                <li>Delivered confidential, high-priority technical support to executive leadership, maintaining 100% satisfaction.</li>
+                                <li>Managed technology operations for over 150 annual executive meetings, ensuring high reliability for critical communications.</li>
+                                <li>Created and maintained detailed documentation and training materials for a company-wide technology migration for 8,000 users.</li>
+                            </ul>
+                         </div>
+                         <div id="exp-panel-3" class="exp-panel hidden bg-white/60 p-6 rounded-lg border">
+                            <ul class="list-disc space-y-3 pl-5 text-gray-700">
+                                <li>Offered comprehensive Tier 2/3 IT support to a user base of over 15,000 employees across multiple departments.</li>
+                                <li>Contributed to operational insights by analyzing incident trends, leading to improved response processes and system reliability.</li>
+                                <li>Partnered with development teams on creating self-service tools, which significantly reduced support contact rates.</li>
+                            </ul>
+                         </div>
+                     </div>
+                 </div>
+            </section>
+
+            <section id="alignment" class="bg-white/80 backdrop-blur-sm p-8 rounded-xl shadow-md mb-12 border border-gray-200">
+                <h2 class="text-3xl font-bold text-gray-800 mb-2 text-center">Alignment with Product Operations Manager Role</h2>
+                <p class="text-center text-gray-500 mb-8">An interactive view showing how my experience directly aligns with the key responsibilities at Altice.</p>
+                <div class="border-b border-gray-200">
+                    <nav class="-mb-px flex flex-wrap justify-center gap-x-6" aria-label="Tabs">
+                        <button class="tab-button whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 tab-active" data-target="panel-1">Process & Quality</button>
+                        <button class="tab-button whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300" data-target="panel-2">Data & KPIs</button>
+                        <button class="tab-button whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300" data-target="panel-3">Product Launch</button>
+                        <button class="tab-button whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300" data-target="panel-4">Team & Tools</button>
+                    </nav>
+                </div>
+                <div class="mt-8">
+                    <div id="panel-1" class="tab-panel">
+                        <div class="grid md:grid-cols-2 gap-8">
+                            <div>
+                                <h3 class="font-semibold text-teal-700 mb-3">Altice Requirement:</h3>
+                                <ul class="list-disc list-inside space-y-2 text-gray-600">
+                                    <li>Streamline product management and development.</li>
+                                    <li>Ensure rigorous testing and validation processes.</li>
+                                    <li>Identify potential risks and develop mitigation strategies.</li>
+                                    <li>Improve customer communication and reduce contact rates.</li>
+                                </ul>
+                            </div>
+                            <div>
+                                <h3 class="font-semibold text-gray-700 mb-3">My Experience:</h3>
+                                <ul class="list-disc list-inside space-y-2 text-gray-600 bg-teal-50 p-4 rounded-md border border-teal-100">
+                                    <li>Investigated and resolved ~30 technical incidents monthly, using root cause analysis to implement process improvements that increased product reliability and quality.</li>
+                                    <li>Partnered with development teams to implement improvements to self-service tools, resulting in improved customer communication and a significant reduction in support contact rates.</li>
+                                    <li>Developed and enforced standardized procedures for user access controls, improving operational efficiency for 300+ users.</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="panel-2" class="tab-panel hidden">
+                         <div class="grid md:grid-cols-2 gap-8">
+                            <div>
+                                <h3 class="font-semibold text-teal-700 mb-3">Altice Requirement:</h3>
+                                <ul class="list-disc list-inside space-y-2 text-gray-600">
+                                    <li>Develop, track and improve KPIs.</li>
+                                    <li>Establish a feedback loop with stakeholders.</li>
+                                    <li>Leverage data to generate actionable insights.</li>
+                                    <li>Experience with A/B testing and user behavior analysis.</li>
+                                </ul>
+                            </div>
+                            <div>
+                                <h3 class="font-semibold text-gray-700 mb-3">My Experience:</h3>
+                                <ul class="list-disc list-inside space-y-2 text-gray-600 bg-teal-50 p-4 rounded-md border border-teal-100">
+                                    <li>Established a user feedback loop by collecting and analyzing survey data to measure product performance; translated findings into actionable insights that informed product improvements.</li>
+                                    <li>Contributed to operational insights by analyzing incident trends, leading to improved response processes and maintaining high product quality.</li>
+                                     <li>Developed and tracked key performance indicators for product engagement using user feedback, identifying opportunities that streamlined the product experience for internal teams.</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="panel-3" class="tab-panel hidden">
+                         <div class="grid md:grid-cols-2 gap-8">
+                            <div>
+                                <h3 class="font-semibold text-teal-700 mb-3">Altice Requirement:</h3>
+                                <ul class="list-disc list-inside space-y-2 text-gray-600">
+                                    <li>Plan and execute product launches seamlessly.</li>
+                                    <li>Develop standardized procedures for launches.</li>
+                                    <li>Ensure coordination with all relevant teams.</li>
+                                </ul>
+                            </div>
+                            <div>
+                                <h3 class="font-semibold text-gray-700 mb-3">My Experience:</h3>
+                                <ul class="list-disc list-inside space-y-2 text-gray-600 bg-teal-50 p-4 rounded-md border border-teal-100">
+                                    <li>Planned and executed over 40 high-profile product-related events annually, developing mitigation strategies and ensuring seamless coordination between technical and non-technical teams.</li>
+                                    <li>Directed full implementation of 4+ SaaS solutions across multiple business units, overseeing the entire lifecycle.</li>
+                                    <li>Achieved approximately $150,000 in annual departmental savings through contract negotiations and vendor management.</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="panel-4" class="tab-panel hidden">
+                        <div class="grid md:grid-cols-2 gap-8">
+                            <div>
+                                <h3 class="font-semibold text-teal-700 mb-3">Altice Requirement:</h3>
+                                <ul class="list-disc list-inside space-y-2 text-gray-600">
+                                    <li>Create and maintain detailed documentation.</li>
+                                    <li>Provide training and support to team members.</li>
+                                    <li>Leverage tools like Jira & Confluence to enhance collaboration.</li>
+                                    <li>Communicate effectively with cross-functional teams.</li>
+                                </ul>
+                            </div>
+                            <div>
+                                <h3 class="font-semibold text-gray-700 mb-3">My Experience:</h3>
+                                <ul class="list-disc list-inside space-y-2 text-gray-600 bg-teal-50 p-4 rounded-md border border-teal-100">
+                                    <li>Created and maintained detailed documentation and training materials for a company-wide technology migration impacting 8,000 users.</li>
+                                    <li>Managed technology operations for over 150 annual executive meetings, ensuring high reliability and providing direct support to key stakeholders.</li>
+                                    <li>Proficient in Jira and Confluence for managing product delivery and team collaboration.</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="certifications" class="bg-white/80 backdrop-blur-sm p-8 rounded-xl shadow-md mb-12 border border-gray-200">
+                 <h2 class="text-3xl font-bold text-gray-800 mb-8 text-center">Relevant Certifications</h2>
+                 <div class="grid md:grid-cols-2 gap-8 max-w-5xl mx-auto">
+                     <div class="bg-gray-50 p-6 rounded-lg border border-gray-200">
+                        <h3 class="font-semibold text-lg text-teal-800 mb-2">Project Management Professional (PMP)</h3>
+                        <p class="text-gray-600">This certification validates my ability to manage projects, mitigate risks, and coordinate teams—all core to the product launch responsibilities at Altice. My experience leading a Windows 10 migration for 8,000 users demonstrates these skills in a large-scale, complex environment.</p>
+                     </div>
+                     <div class="bg-gray-50 p-6 rounded-lg border border-gray-200">
+                        <h3 class="font-semibold text-lg text-teal-800 mb-2">Certified Scrum Product Owner (CSPO)</h3>
+                        <p class="text-gray-600">As a CSPO, I am adept at managing product backlogs and ensuring development work aligns with stakeholder needs. This directly supports the goal of streamlining product management and establishing effective feedback loops, as seen in my work analyzing user survey data to guide improvements.</p>
+                     </div>
+                     <div class="bg-gray-50 p-6 rounded-lg border border-gray-200">
+                        <h3 class="font-semibold text-lg text-teal-800 mb-2">ITIL v4</h3>
+                        <p class="text-gray-600">ITIL provides a framework for service management that is crucial for maintaining high product quality and reliability. My background in resolving technical incidents and using that data to improve processes is a practical application of ITIL principles to enhance operational efficiency.</p>
+                     </div>
+                     <div class="bg-gray-50 p-6 rounded-lg border border-gray-200">
+                        <h3 class="font-semibold text-lg text-teal-800 mb-2">Google AI Essentials</h3>
+                        <p class="text-gray-600">This certification shows an awareness of modern technologies and methodologies. It reflects my commitment to innovation and leveraging new tools for data analysis and process automation, aligning with Altice's goal of implementing new technologies to drive innovation.</p>
+                     </div>
+                 </div>
+            </section>
+
+            <section id="skills" class="text-center">
+                <h2 class="text-3xl font-bold text-gray-800 mb-8 text-center">Technical Skills & Methodologies</h2>
+                <div class="max-w-4xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-8">
+                    <div>
+                        <h4 class="font-semibold text-lg text-teal-700 mb-2">Platforms</h4>
+                        <p class="text-gray-600">Jira, Confluence, Google Workspace, Miro, Tableau</p>
+                    </div>
+                     <div>
+                        <h4 class="font-semibold text-lg text-teal-700 mb-2">Analysis</h4>
+                        <p class="text-gray-600">KPI Tracking, Data Interpretation, User Feedback</p>
+                    </div>
+                     <div>
+                        <h4 class="font-semibold text-lg text-teal-700 mb-2">Methodologies</h4>
+                        <p class="text-gray-600">Agile, Scrum, ITIL</p>
+                    </div>
+                     <div>
+                        <h4 class="font-semibold text-lg text-teal-700 mb-2">Process</h4>
+                        <p class="text-gray-600">Risk Mitigation, Quality Assurance, Lifecycle Mgmt</p>
+                    </div>
+                </div>
+            </section>
+        </main>
         
-        <section id="summary" class="mb-16 scroll-mt-20">
-            <div class="max-w-4xl mx-auto text-center">
-                <h1 class="text-4xl md:text-5xl font-bold text-slate-800 tracking-tight">Product Operations Manager</h1>
-                <p class="mt-4 text-lg text-sky-600 font-medium">An interactive profile for the role at Optimum</p>
-                <p class="mt-6 text-base md:text-lg text-slate-600">An operations professional with a 10-year record of improving product quality and operational efficiency. Experienced in creating data-driven processes, managing the product lifecycle, and facilitating collaboration between product, engineering, and support teams to enhance the customer experience and achieve strategic goals.</p>
+        <footer class="text-center mt-16 pt-8 border-t border-gray-200">
+            <p class="text-gray-600">Marlon Jordan</p>
+            <div class="mt-2 flex justify-center items-center space-x-4 text-gray-500">
+                <a href="mailto:Marlon.Jordan21@gmail.com" class="hover:text-teal-600">Marlon.Jordan21@gmail.com</a>
+                <span class="text-gray-300">|</span>
+                <span>(646) 249-6025</span>
             </div>
-        </section>
+        </footer>
+    </div>
 
-        <section id="role-fit" class="mb-16 scroll-mt-20">
-            <div class="text-center mb-12">
-                <h2 class="text-3xl font-bold text-slate-800">Role Fit Analysis</h2>
-                <p class="mt-4 max-w-3xl mx-auto text-slate-600">This section directly maps Optimum's requirements for the Product Operations Manager role to my relevant experience. Click on a requirement on the left to see the corresponding proof point from my career on the right.</p>
-            </div>
-            <div class="grid md:grid-cols-2 gap-8">
-                <div class="bg-white p-6 rounded-lg border border-slate-200">
-                    <h3 class="text-xl font-semibold text-slate-800 mb-4">Optimum's Needs</h3>
-                    <ul id="jd-list" class="space-y-3">
-                        <li data-match="kpi" class="p-4 rounded-lg cursor-pointer hover:bg-slate-100 transition-colors">Develop, track and improve KPIs measuring product success and operational efficiency.</li>
-                        <li data-match="process" class="p-4 rounded-lg cursor-pointer hover:bg-slate-100 transition-colors">Identify and implement improvements to streamline product management and development.</li>
-                        <li data-match="quality" class="p-4 rounded-lg cursor-pointer hover:bg-slate-100 transition-colors">Ensure rigorous testing and validation processes to maintain high product quality and reliability.</li>
-                        <li data-match="launch" class="p-4 rounded-lg cursor-pointer hover:bg-slate-100 transition-colors">Plan and execute product launches, ensuring seamless coordination with all relevant teams.</li>
-                        <li data-match="feedback" class="p-4 rounded-lg cursor-pointer hover:bg-slate-100 transition-colors">Establish a feedback loop with internal/external stakeholders to drive continuous improvement.</li>
-                        <li data-match="risk" class="p-4 rounded-lg cursor-pointer hover:bg-slate-100 transition-colors">Identify potential risks in product operations and develop mitigation strategies.</li>
-                        <li data-match="tools" class="p-4 rounded-lg cursor-pointer hover:bg-slate-100 transition-colors">Leverage and manage tools and technology to enhance product operations and collaboration.</li>
-                        <li data-match="docs" class="p-4 rounded-lg cursor-pointer hover:bg-slate-100 transition-colors">Create and maintain detailed documentation for processes, procedures and product information.</li>
-                    </ul>
-                </div>
-                <div class="bg-white p-6 rounded-lg border border-slate-200">
-                    <h3 class="text-xl font-semibold text-slate-800 mb-4">My Experience</h3>
-                    <ul id="resume-list" class="space-y-3">
-                        <li data-match="kpi" class="p-4 rounded-lg transition-all duration-300">Analyzed operational data to track and improve KPIs, identifying performance trends that informed product strategy and led to measurable process improvements.</li>
-                        <li data-match="process" class="p-4 rounded-lg transition-all duration-300">Developed and enforced standardized procedures for user access and provisioning, improving operational efficiency and security for over 300 team members.</li>
-                        <li data-match="quality" class="p-4 rounded-lg transition-all duration-300">Managed and validated conferencing technologies for over 150 annual global meetings, ensuring high reliability and a seamless user experience.</li>
-                        <li data-match="launch" class="p-4 rounded-lg transition-all duration-300">Planned and executed a company-wide technology launch for 8,000 users by creating detailed documentation and providing training, which reduced user-reported issues.</li>
-                        <li data-match="feedback" class="p-4 rounded-lg transition-all duration-300">Led efforts to integrate operational insights into product development cycles, ensuring alignment between product goals and operational capabilities.</li>
-                        <li data-match="risk" class="p-4 rounded-lg transition-all duration-300">Ensured a high-quality product experience for Michael Bloomberg and his executive team by providing dedicated support and developing mitigation strategies for potential technology risks.</li>
-                        <li data-match="tools" class="p-4 rounded-lg transition-all duration-300">Managed the technology lifecycle for over 10 product-related tools, implementing 4+ solutions that streamlined operational processes and improved collaboration.</li>
-                         <li data-match="docs" class="p-4 rounded-lg transition-all duration-300">Created detailed documentation for product information and operational procedures, providing training and support to team members on new processes and tools.</li>
-                    </ul>
-                </div>
-            </div>
-        </section>
-
-        <section id="experience" class="mb-16 scroll-mt-20">
-            <div class="text-center mb-12">
-                <h2 class="text-3xl font-bold text-slate-800">Career Journey</h2>
-                <p class="mt-4 max-w-3xl mx-auto text-slate-600">A timeline of my professional experience, showing a consistent record of increasing responsibility and impact. Click on any role to expand its key accomplishments.</p>
-            </div>
-            <div class="max-w-4xl mx-auto">
-                <div class="relative">
-                    <div class="absolute left-1/2 -ml-px w-0.5 h-full bg-slate-300"></div>
-                    
-                    <div class="timeline-item mt-8 cursor-pointer group">
-                        <div class="flex items-center">
-                            <div class="w-1/2 pr-8 text-right">
-                                <h4 class="font-bold text-lg text-slate-800">Product Operations Specialist</h4>
-                                <p class="text-sm text-slate-500">Bloomberg LP</p>
-                                <p class="text-sm font-medium text-sky-600">Aug 2021 - Nov 2024</p>
-                            </div>
-                            <div class="w-10 h-10 bg-white border-4 border-sky-500 rounded-full z-10 mx-auto flex-shrink-0"></div>
-                            <div class="w-1/2 pl-8"></div>
-                        </div>
-                        <div class="timeline-item-content ml-[50%] pl-14 pb-8">
-                             <ul class="mt-4 space-y-2 text-sm text-slate-600 list-disc pl-5">
-                                <li>Managed the technology lifecycle for over 10 product-related tools, implementing 4+ solutions that streamlined operational processes and improved collaboration across business units.</li>
-                                <li>Developed and enforced standardized procedures for user access and provisioning, improving operational efficiency and security for over 300 team members.</li>
-                                <li>Led efforts to integrate operational insights into product development cycles, ensuring alignment between product goals and operational capabilities.</li>
-                                <li>Developed and implemented communication strategies that streamlined information flow between Product, Engineering, and Operations teams.</li>
-                                <li>Analyzed operational data to track and improve KPIs, identifying performance trends that informed product strategy.</li>
-                            </ul>
-                        </div>
-                    </div>
-
-                    <div class="timeline-item mt-8 cursor-pointer group">
-                        <div class="flex items-center">
-                            <div class="w-1/2 pr-8 text-right"></div>
-                            <div class="w-10 h-10 bg-white border-4 border-sky-500 rounded-full z-10 mx-auto flex-shrink-0"></div>
-                            <div class="w-1/2 pl-8">
-                                <h4 class="font-bold text-lg text-slate-800">Technical Support Lead Executive</h4>
-                                <p class="text-sm text-slate-500">Bloomberg LP</p>
-                                <p class="text-sm font-medium text-sky-600">May 2017 - Aug 2021</p>
-                            </div>
-                        </div>
-                        <div class="timeline-item-content ml-[50%] pl-14 pb-8">
-                             <ul class="mt-4 space-y-2 text-sm text-slate-600 list-disc pl-5">
-                                <li>Ensured a high-quality product experience for Michael Bloomberg and his executive team by providing dedicated support and developing mitigation strategies for potential technology risks.</li>
-                                <li>Managed and validated conferencing technologies for over 150 annual global meetings, ensuring high reliability and a seamless user experience.</li>
-                                <li>Planned and executed a company-wide technology launch for 8,000 users by creating detailed documentation and providing training, which reduced user-reported issues.</li>
-                            </ul>
-                        </div>
-                    </div>
-
-                    <div class="timeline-item mt-8 cursor-pointer group">
-                        <div class="flex items-center">
-                            <div class="w-1/2 pr-8 text-right">
-                                <h4 class="font-bold text-lg text-slate-800">Senior IT Support Engineer</h4>
-                                <p class="text-sm text-slate-500">Bloomberg LP</p>
-                                <p class="text-sm font-medium text-sky-600">May 2013 - May 2017</p>
-                            </div>
-                            <div class="w-10 h-10 bg-white border-4 border-sky-500 rounded-full z-10 mx-auto flex-shrink-0"></div>
-                            <div class="w-1/2 pl-8"></div>
-                        </div>
-                        <div class="timeline-item-content ml-[50%] pl-14 pb-8">
-                             <ul class="mt-4 space-y-2 text-sm text-slate-600 list-disc pl-5">
-                                <li>Demonstrated advanced problem-solving skills by resolving complex technical issues for a 15,000-person user base, contributing to product stability.</li>
-                                <li>Identified and implemented process improvements within incident management, leading to improved response times and the consistent meeting of service level agreements.</li>
-                                <li>Collaborated with system administrators to upgrade self-service IT tools, leading to a significant reduction in support tickets.</li>
-                            </ul>
-                        </div>
-                    </div>
-
-                </div>
-            </div>
-        </section>
-
-
-        <section id="skills" class="mb-16 scroll-mt-20">
-            <div class="text-center mb-12">
-                <h2 class="text-3xl font-bold text-slate-800">Core Competencies</h2>
-                <p class="mt-4 max-w-3xl mx-auto text-slate-600">A visual overview of my key skills. These competencies have been developed through hands-on experience in managing products, tools, and processes throughout my career.</p>
-            </div>
-            <div class="space-y-12">
-                <div>
-                    <h3 class="text-xl font-semibold text-center mb-4 text-slate-800">Product Management & Operations</h3>
-                    <div class="chart-container">
-                        <canvas id="productSkillsChart"></canvas>
-                    </div>
-                </div>
-                <div>
-                    <h3 class="text-xl font-semibold text-center mb-4 text-slate-800">Tools & Platforms</h3>
-                    <div class="chart-container">
-                        <canvas id="toolsSkillsChart"></canvas>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <section id="contact" class="scroll-mt-20">
-             <div class="text-center">
-                <h2 class="text-3xl font-bold text-slate-800">Let's Connect</h2>
-                <p class="mt-4 max-w-3xl mx-auto text-slate-600">Thank you for reviewing my profile. I am eager to discuss how my experience in product operations can benefit Optimum. Please feel free to reach out.</p>
-                <div class="mt-8 flex justify-center items-center space-x-6 text-slate-600">
-                     <a href="mailto:Marlon.Jordan21@gmail.com" class="hover:text-sky-600">Marlon.Jordan21@gmail.com</a>
-                     <span>&bull;</span>
-                     <a href="https://linkedin.com/in/mj2117" target="_blank" rel="noopener noreferrer" class="hover:text-sky-600">linkedin.com/in/mj2117</a>
-                     <span>&bull;</span>
-                     <span>(646) 249-6025</span>
-                </div>
-            </div>
-        </section>
-
-    </main>
-    
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            
-            const mobileMenuButton = document.getElementById('mobile-menu-button');
-            const mobileMenu = document.getElementById('mobile-menu');
-            const hamburgerIcon = document.getElementById('hamburger-icon');
-            
-            mobileMenuButton.addEventListener('click', () => {
-                const isExpanded = mobileMenuButton.getAttribute('aria-expanded') === 'true';
-                mobileMenuButton.setAttribute('aria-expanded', !isExpanded);
-                mobileMenu.classList.toggle('hidden');
-                hamburgerIcon.children[0].classList.toggle('rotate-45');
-                hamburgerIcon.children[0].classList.toggle('translate-y-2');
-                hamburgerIcon.children[1].classList.toggle('opacity-0');
-                hamburgerIcon.children[2].classList.toggle('-rotate-45');
-                hamburgerIcon.children[2].classList.toggle('-translate-y-2');
-            });
+        document.addEventListener('DOMContentLoaded', function () {
+            const tabs = document.querySelectorAll('.tab-button');
+            const tabPanels = document.querySelectorAll('.tab-panel');
 
-            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-                anchor.addEventListener('click', function (e) {
-                    if(this.closest('#mobile-menu')) {
-                       mobileMenuButton.click();
-                    }
-                });
-            });
-            
-            const jdListItems = document.querySelectorAll('#jd-list li');
-            const resumeListItems = document.querySelectorAll('#resume-list li');
-            
-            jdListItems.forEach(item => {
-                item.addEventListener('click', () => {
-                    const matchKey = item.dataset.match;
-                    
-                    resumeListItems.forEach(resumeItem => {
-                        if(resumeItem.dataset.match === matchKey) {
-                            resumeItem.classList.add('highlight-match');
-                            resumeItem.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                        } else {
-                            resumeItem.classList.remove('highlight-match');
-                        }
-                    });
+            tabs.forEach(tab => {
+                tab.addEventListener('click', () => {
+                    tabs.forEach(item => item.classList.remove('tab-active'));
+                    tab.classList.add('tab-active');
+                    const target = document.getElementById(tab.dataset.target);
+                    tabPanels.forEach(panel => panel.classList.add('hidden'));
+                    target.classList.remove('hidden');
                 });
             });
 
-            const timelineItems = document.querySelectorAll('.timeline-item');
-            timelineItems.forEach(item => {
-                item.addEventListener('click', (e) => {
-                    e.currentTarget.querySelector('.timeline-item-content').classList.toggle('expanded');
+            const expNavButtons = document.querySelectorAll('.exp-nav-button');
+            const expPanels = document.querySelectorAll('.exp-panel');
+
+            expNavButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    expNavButtons.forEach(btn => btn.classList.remove('exp-nav-active'));
+                    button.classList.add('exp-nav-active');
+                    const target = document.getElementById(button.dataset.target);
+                    expPanels.forEach(panel => panel.classList.add('hidden'));
+                    target.classList.remove('hidden');
                 });
             });
-
-            const sections = document.querySelectorAll('section');
-            const navLinks = document.querySelectorAll('.nav-link');
-
-            const observer = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        navLinks.forEach(link => {
-                            link.classList.toggle('active', link.getAttribute('href').substring(1) === entry.target.id);
-                        });
-                    }
-                });
-            }, { rootMargin: '-50% 0px -50% 0px' });
-
-            sections.forEach(section => observer.observe(section));
             
-            const chartOptions = {
-                indexAxis: 'y',
-                responsive: true,
-                maintainAspectRatio: false,
-                scales: {
-                    x: {
-                        beginAtZero: true,
-                        max: 100,
-                        ticks: {
-                           display: false
-                        },
-                        grid: {
-                           display: false,
-                           drawBorder: false
-                        }
-                    },
-                    y: {
-                        ticks: {
-                           font: {
-                               size: 14,
-                           },
-                           color: '#475569' 
-                        },
-                        grid: {
-                           display: false,
-                           drawBorder: false
-                        }
-                    }
+            document.getElementById('alignment-shortcut').addEventListener('click', () => {
+                document.getElementById('alignment').scrollIntoView({ behavior: 'smooth' });
+            });
+
+            const ctx = document.getElementById('competencyChart').getContext('2d');
+            const competencyChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['Product & Process Optimization', 'Data Analysis & KPI Management', 'Product Launch & Coordination', 'Stakeholder & Team Collaboration'],
+                    datasets: [{
+                        label: 'Proficiency',
+                        data: [95, 90, 92, 88],
+                        backgroundColor: 'rgba(13, 148, 136, 0.6)',
+                        borderColor: 'rgba(15, 118, 110, 1)',
+                        borderWidth: 1
+                    }]
                 },
-                plugins: {
-                    legend: {
-                        display: false
+                options: {
+                    indexAxis: 'y',
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        x: {
+                            beginAtZero: true,
+                            max: 100,
+                            ticks: {
+                                callback: function(value) { return value + '%' }
+                            }
+                        },
+                        y: { ticks: { autoSkip: false } }
                     },
-                    tooltip: {
-                        enabled: false
-                    }
-                },
-                layout: {
-                    padding: {
-                        left: 10,
-                        right: 10
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                             callbacks: {
+                                label: function(context) { return ` Proficiency: ${context.parsed.x}%`; }
+                            }
+                        }
                     }
                 }
-            };
-
-            const chartBackgroundColor = ['#0ea5e9', '#38bdf8', '#7dd3fc', '#bae6fd', '#e0f2fe'];
-
-            new Chart(document.getElementById('productSkillsChart'), {
-                type: 'bar',
-                data: {
-                    labels: ['KPI Development', 'Process Optimization', 'Risk Mitigation', 'Stakeholder Collaboration', 'User Analysis'],
-                    datasets: [{
-                        label: 'Skill Level',
-                        data: [95, 90, 85, 95, 80],
-                        backgroundColor: chartBackgroundColor,
-                        borderRadius: 4
-                    }]
-                },
-                options: chartOptions
             });
-
-            new Chart(document.getElementById('toolsSkillsChart'), {
-                type: 'bar',
-                data: {
-                    labels: ['Jira', 'Scrum', 'Agile', 'ITIL'],
-                     datasets: [{
-                        label: 'Proficiency',
-                        data: [95, 80, 90, 90, 85],
-                        backgroundColor: chartBackgroundColor,
-                        borderRadius: 4
-                    }]
-                },
-                options: chartOptions
-            });
-
         });
     </script>
-
 </body>
 </html>
